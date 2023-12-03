@@ -1,0 +1,10 @@
+part: 1
+{{- $answer := 0 -}}
+{{- range .Files.Lines "input.txt" -}}
+{{- if ne . "" }}
+{{- $numbersInList := regexFindAll "[0-9]" . -1 }}
+{{- $combinedFirstLast := print (first $numbersInList) (last $numbersInList) -}}
+{{- $answer = add $answer (int $combinedFirstLast) -}}
+{{- end }}
+{{- end }}
+answer: {{ $answer }}

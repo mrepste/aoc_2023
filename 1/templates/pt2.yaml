@@ -1,0 +1,21 @@
+part: 2
+{{- $answer := 0 -}}
+{{- $fwdMapping := dict "one" "1" "two" "2" "three" "3" "four" "4" "five" "5" "six" "6" "seven" "7" "eight" "8" "nine" "9" -}}
+{{- $revMapping := dict "eno" "1" "owt" "2" "eerht" "3" "ruof" "4" "evif" "5" "xis" "6" "neves" "7" "thgie" "8" "enin" "9" -}}
+{{- range .Files.Lines "input.txt" -}}
+{{- if ne . "" -}}
+{{- $forwardString := . -}}
+{{- $splitString := reverse (splitList " " (trim (regexReplaceAll "([a-z0-9])" . "${1} "))) -}}
+{{- $reversedString := "" -}}
+{{- range $splitString -}}
+{{- $reversedString = print $reversedString . -}}
+{{- end -}}
+{{- $firstNum := regexFind "(one|two|three|four|five|six|seven|eight|nine|[1-9])" $forwardString -}}
+{{- $firstNum := (hasKey $fwdMapping $firstNum) | ternary (get $fwdMapping $firstNum) $firstNum -}}
+{{- $lastNum := regexFind "(eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|[1-9])" $reversedString -}}
+{{- $lastNum := (hasKey $revMapping $lastNum) | ternary (get $revMapping $lastNum) $lastNum -}}
+{{- $combinedFirstLast := print $firstNum $lastNum }}
+{{- $answer = add $answer (int64 $combinedFirstLast) }}
+{{- end }}
+{{- end }}
+answer: {{ $answer }}
